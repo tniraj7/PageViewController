@@ -2,7 +2,21 @@ import UIKit
 
 class MasterViewController: UIViewController {
 
-    @IBOutlet weak var navigationView: UIView!
+    var navigationView = UIView()
+    
+    var leftButton: UIButton {
+        let btn = UIButton()
+        btn.imageView?.image = UIImage(systemName: "chevron.left.circle")
+        btn.tintColor = .systemBlue
+        return btn
+    }
+    
+    var rightButton: UIButton {
+        let btn = UIButton()
+        btn.imageView?.image = UIImage(systemName: "chevron.left.circle")
+        btn.tintColor = .systemBlue
+        return btn
+    }
     
     let pageVC = PageViewController()
     
@@ -11,7 +25,6 @@ class MasterViewController: UIViewController {
     var currentViewControllerIndex = 0
     
     override func viewDidLoad() {
-        navigationView.translatesAutoresizingMaskIntoConstraints = false
         super.viewDidLoad()
         configurePageViewController()
     }
@@ -24,7 +37,13 @@ class MasterViewController: UIViewController {
          print("Tapped!")
     }
     
+    private func configureNavigationView() {
+        self.view.addSubview(navigationView)
+        navigationView.translatesAutoresizingMaskIntoConstraints = false
+    }
+    
     private func configurePageViewController() {
+        
         pageVC.dataSource = self
         pageVC.delegate = self
         
@@ -35,10 +54,18 @@ class MasterViewController: UIViewController {
         
         let views : [String: Any] = [
             "pageView": pageVC.view!,
-            "navView": navigationView!
+            "navView": navigationView
         ]
         
         var allConstraints = [NSLayoutConstraint]()
+        
+        let navViewConstraints = NSLayoutConstraint.constraints(
+            withVisualFormat: "H:|[navView]|",
+            options: [],
+            metrics: nil,
+            views: views)
+        
+         allConstraints += navViewConstraints
         
         let allViewConstraints = NSLayoutConstraint.constraints(
             withVisualFormat: "V:|-88-[pageView]-|",
@@ -50,7 +77,7 @@ class MasterViewController: UIViewController {
         allConstraints += allViewConstraints
                 
         let pageViewConstraints = NSLayoutConstraint.constraints(
-            withVisualFormat: "H:|-16-[pageView]-16-|",
+            withVisualFormat: "H:|[pageView]|",
             options: [],
             metrics: nil,
             views: views
