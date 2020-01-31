@@ -4,19 +4,32 @@ class MasterViewController: UIViewController {
 
     var navigationView = UIView()
     
-    var leftButton: UIButton {
+    var leftButton: UIButton = {
         let btn = UIButton()
-        btn.imageView?.image = UIImage(systemName: "chevron.left.circle")
+        let config = UIImage.SymbolConfiguration(pointSize: 30, weight: UIImage.SymbolWeight(rawValue: 30)!)
+        let image = UIImage(systemName: "chevron.left.circle", withConfiguration: config)
+        btn.setImage(image, for: .normal)
         btn.tintColor = .systemBlue
         return btn
-    }
+    }()
     
-    var rightButton: UIButton {
+    var rightButton: UIButton = {
         let btn = UIButton()
-        btn.imageView?.image = UIImage(systemName: "chevron.left.circle")
+        let config = UIImage.SymbolConfiguration(pointSize: 30, weight: UIImage.SymbolWeight(rawValue: 30)!)
+        let image = UIImage(systemName: "chevron.right.circle", withConfiguration: config)
+         btn.setImage(image, for: .normal)
         btn.tintColor = .systemBlue
         return btn
-    }
+    }()
+    
+    var dateLabel: UILabel = {
+        let label = UILabel()
+        label.text = "2020/30/01"
+        label.textColor = .black
+        label.textAlignment = .center
+        label.font = UIFont(descriptor: .preferredFontDescriptor(withTextStyle: .largeTitle), size: 20)
+        return label
+    }()
     
     let pageVC = PageViewController()
     
