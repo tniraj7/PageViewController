@@ -2,7 +2,34 @@ import UIKit
 
 class MasterViewController: UIViewController {
 
-    @IBOutlet weak var navigationView: UIView!
+    var navigationView = UIView()
+    
+    var leftButton: UIButton = {
+        let btn = UIButton()
+        let config = UIImage.SymbolConfiguration(pointSize: 30, weight: UIImage.SymbolWeight(rawValue: 30)!)
+        let image = UIImage(systemName: "chevron.left.circle", withConfiguration: config)
+        btn.setImage(image, for: .normal)
+        btn.tintColor = .systemBlue
+        return btn
+    }()
+    
+    var rightButton: UIButton = {
+        let btn = UIButton()
+        let config = UIImage.SymbolConfiguration(pointSize: 30, weight: UIImage.SymbolWeight(rawValue: 30)!)
+        let image = UIImage(systemName: "chevron.right.circle", withConfiguration: config)
+         btn.setImage(image, for: .normal)
+        btn.tintColor = .systemBlue
+        return btn
+    }()
+    
+    var dateLabel: UILabel = {
+        let label = UILabel()
+        label.text = "2020/30/01"
+        label.textColor = .black
+        label.textAlignment = .center
+        label.font = UIFont(descriptor: .preferredFontDescriptor(withTextStyle: .largeTitle), size: 20)
+        return label
+    }()
     
     let pageVC = PageViewController()
     
@@ -11,20 +38,23 @@ class MasterViewController: UIViewController {
     var currentViewControllerIndex = 0
     
     override func viewDidLoad() {
-        navigationView.translatesAutoresizingMaskIntoConstraints = false
         super.viewDidLoad()
-        configurePageViewController()
+        configureView()
+        configureNavigationButtons()
     }
 
-    @IBAction func goToPreviousRaceTrack(_ sender: Any) {
+    @objc func goToPreviousRaceTrack(_ sender: Any) {
         var index: Int = currentViewControllerIndex
+         print("Previous!")
     }
 
-    @IBAction func goToNextRaceTrack(_ sender: Any) {
-         print("Tapped!")
+    @objc func goToNextRaceTrack(_ sender: Any) {
+         print("Next!")
     }
+
     
-    private func configurePageViewController() {
+    private func configureView() {
+        
         pageVC.dataSource = self
         pageVC.delegate = self
         
@@ -32,25 +62,36 @@ class MasterViewController: UIViewController {
         self.view.addSubview(pageVC.view)
         pageVC.didMove(toParent: self)
         pageVC.view.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(navigationView)
+        navigationView.translatesAutoresizingMaskIntoConstraints = false
         
         let views : [String: Any] = [
             "pageView": pageVC.view!,
-            "navView": navigationView!
+            "navView": navigationView
         ]
         
         var allConstraints = [NSLayoutConstraint]()
         
-        let allViewConstraints = NSLayoutConstraint.constraints(
-            withVisualFormat: "V:|-88-[pageView]-|",
+        let allViewVConstraints = NSLayoutConstraint.constraints(
+            withVisualFormat: "V:|-88-[navView(50@750)][pageView]|",
             options: [],
             metrics: nil,
             views: views
         )
         
-        allConstraints += allViewConstraints
+        allConstraints += allViewVConstraints
+        
+        let navViewHConstraints = NSLayoutConstraint.constraints(
+            withVisualFormat: "H:|[navView]|",
+            options: [],
+            metrics: nil,
+            views: views
+        )
+        
+        allConstraints += navViewHConstraints
                 
         let pageViewConstraints = NSLayoutConstraint.constraints(
-            withVisualFormat: "H:|-16-[pageView]-16-|",
+            withVisualFormat: "H:|[pageView]|",
             options: [],
             metrics: nil,
             views: views
@@ -59,7 +100,6 @@ class MasterViewController: UIViewController {
         allConstraints += pageViewConstraints
 
         NSLayoutConstraint.activate(allConstraints)
-        
         
         guard let startVC = detailViewControllerAt(index: currentViewControllerIndex) else {
             return
@@ -70,6 +110,61 @@ class MasterViewController: UIViewController {
             direction: .forward,
             animated: true
         )
+    }
+    
+    private func configureNavigationButtons() {
+        navigationView.addSubview(leftButton)
+        navigationView.addSubview(rightButton)
+        navigationView.addSubview(dateLabel)
+        
+        leftButton.translatesAutoresizingMaskIntoConstraints = false
+        rightButton.translatesAutoresizingMaskIntoConstraints = false
+        dateLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        leftButton.addTarget(self, action: #selector(goToPreviousRaceTrack(_:)), for: .touchUpInside)
+        rightButton.addTarget(self, action: #selector(goToNextRaceTrack(_:)), for: .touchUpInside)
+        
+        let views : [String: Any] = [
+            "leftbtn": leftButton,
+            "rightbtn": rightButton,
+            "dateLabel": dateLabel
+        ]
+        
+        var allConstraints = [NSLayoutConstraint]()
+        
+        let leftBtnVConstraints = NSLayoutConstraint.constraints(
+            withVisualFormat: "V:|-[leftbtn]-|",
+            options: [],
+            metrics: nil,
+            views: views)
+        
+        allConstraints += leftBtnVConstraints
+        
+        let rightBtnVConstraints = NSLayoutConstraint.constraints(
+            withVisualFormat: "V:|-[rightbtn]-|",
+            options: [],
+            metrics: nil,
+            views: views)
+        
+        allConstraints += rightBtnVConstraints
+        
+        let labelVConstraints = NSLayoutConstraint.constraints(
+            withVisualFormat: "V:|-[dateLabel]-|",
+            options: [],
+            metrics: nil,
+            views: views)
+        
+        allConstraints += labelVConstraints
+        
+        let horizontalConstraints = NSLayoutConstraint.constraints(
+            withVisualFormat: "H:|-[leftbtn(40)]-[dateLabel]-[rightbtn(40)]-|",
+            options: [],
+            metrics: nil,
+            views: views)
+        
+        allConstraints += horizontalConstraints
+        
+        NSLayoutConstraint.activate(allConstraints)
     }
     
     private func detailViewControllerAt(index: Int) -> DataViewController? {
