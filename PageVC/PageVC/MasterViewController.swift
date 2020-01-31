@@ -202,12 +202,12 @@ extension MasterViewController: UIPageViewControllerDataSource, UIPageViewContro
         return detailViewControllerAt(index: currentIndex)
     }
 
-    func presentationCount(for pageViewController: UIPageViewController) -> Int {
-        colors.count
-    }
-    
-    func presentationIndex(for pageViewController: UIPageViewController) -> Int {
-        return currentViewControllerIndex
-    }
+//    func presentationCount(for pageViewController: UIPageViewController) -> Int {
+//        colors.count
+//    }
+//    
+//    func presentationIndex(for pageViewController: UIPageViewController) -> Int {
+//        return currentViewControllerIndex
+//    }
     
 }
