@@ -42,18 +42,15 @@ class MasterViewController: UIViewController {
         configurePageViewController()
     }
 
-    @IBAction func goToPreviousRaceTrack(_ sender: Any) {
+    @objc func goToPreviousRaceTrack(_ sender: Any) {
         var index: Int = currentViewControllerIndex
+         print("Previous!")
     }
 
-    @IBAction func goToNextRaceTrack(_ sender: Any) {
-         print("Tapped!")
+    @objc func goToNextRaceTrack(_ sender: Any) {
+         print("Next!")
     }
-    
-    private func configureNavigationView() {
-        self.view.addSubview(navigationView)
-        navigationView.translatesAutoresizingMaskIntoConstraints = false
-    }
+
     
     private func configurePageViewController() {
         
