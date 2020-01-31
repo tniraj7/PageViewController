@@ -39,7 +39,7 @@ class MasterViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        configurePageViewController()
+        configureView()
         configureNavigationButtons()
     }
 
@@ -53,7 +53,7 @@ class MasterViewController: UIViewController {
     }
 
     
-    private func configurePageViewController() {
+    private func configureView() {
         
         pageVC.dataSource = self
         pageVC.delegate = self
@@ -62,6 +62,8 @@ class MasterViewController: UIViewController {
         self.view.addSubview(pageVC.view)
         pageVC.didMove(toParent: self)
         pageVC.view.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(navigationView)
+        navigationView.translatesAutoresizingMaskIntoConstraints = false
         
         let views : [String: Any] = [
             "pageView": pageVC.view!,
@@ -70,22 +72,23 @@ class MasterViewController: UIViewController {
         
         var allConstraints = [NSLayoutConstraint]()
         
-        let navViewConstraints = NSLayoutConstraint.constraints(
-            withVisualFormat: "H:|[navView]|",
-            options: [],
-            metrics: nil,
-            views: views)
-        
-         allConstraints += navViewConstraints
-        
-        let allViewConstraints = NSLayoutConstraint.constraints(
-            withVisualFormat: "V:|-88-[pageView]-|",
+        let allViewVConstraints = NSLayoutConstraint.constraints(
+            withVisualFormat: "V:|-88-[navView(50@750)][pageView]|",
             options: [],
             metrics: nil,
             views: views
         )
         
-        allConstraints += allViewConstraints
+        allConstraints += allViewVConstraints
+        
+        let navViewHConstraints = NSLayoutConstraint.constraints(
+            withVisualFormat: "H:|[navView]|",
+            options: [],
+            metrics: nil,
+            views: views
+        )
+        
+        allConstraints += navViewHConstraints
                 
         let pageViewConstraints = NSLayoutConstraint.constraints(
             withVisualFormat: "H:|[pageView]|",
@@ -97,7 +100,6 @@ class MasterViewController: UIViewController {
         allConstraints += pageViewConstraints
 
         NSLayoutConstraint.activate(allConstraints)
-        
         
         guard let startVC = detailViewControllerAt(index: currentViewControllerIndex) else {
             return
