@@ -40,6 +40,7 @@ class MasterViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configurePageViewController()
+        configureNavigationButtons()
     }
 
     @objc func goToPreviousRaceTrack(_ sender: Any) {
@@ -107,6 +108,61 @@ class MasterViewController: UIViewController {
             direction: .forward,
             animated: true
         )
+    }
+    
+    private func configureNavigationButtons() {
+        navigationView.addSubview(leftButton)
+        navigationView.addSubview(rightButton)
+        navigationView.addSubview(dateLabel)
+        
+        leftButton.translatesAutoresizingMaskIntoConstraints = false
+        rightButton.translatesAutoresizingMaskIntoConstraints = false
+        dateLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        leftButton.addTarget(self, action: #selector(goToPreviousRaceTrack(_:)), for: .touchUpInside)
+        rightButton.addTarget(self, action: #selector(goToNextRaceTrack(_:)), for: .touchUpInside)
+        
+        let views : [String: Any] = [
+            "leftbtn": leftButton,
+            "rightbtn": rightButton,
+            "dateLabel": dateLabel
+        ]
+        
+        var allConstraints = [NSLayoutConstraint]()
+        
+        let leftBtnVConstraints = NSLayoutConstraint.constraints(
+            withVisualFormat: "V:|-[leftbtn]-|",
+            options: [],
+            metrics: nil,
+            views: views)
+        
+        allConstraints += leftBtnVConstraints
+        
+        let rightBtnVConstraints = NSLayoutConstraint.constraints(
+            withVisualFormat: "V:|-[rightbtn]-|",
+            options: [],
+            metrics: nil,
+            views: views)
+        
+        allConstraints += rightBtnVConstraints
+        
+        let labelVConstraints = NSLayoutConstraint.constraints(
+            withVisualFormat: "V:|-[dateLabel]-|",
+            options: [],
+            metrics: nil,
+            views: views)
+        
+        allConstraints += labelVConstraints
+        
+        let horizontalConstraints = NSLayoutConstraint.constraints(
+            withVisualFormat: "H:|-[leftbtn(40)]-[dateLabel]-[rightbtn(40)]-|",
+            options: [],
+            metrics: nil,
+            views: views)
+        
+        allConstraints += horizontalConstraints
+        
+        NSLayoutConstraint.activate(allConstraints)
     }
     
     private func detailViewControllerAt(index: Int) -> DataViewController? {
