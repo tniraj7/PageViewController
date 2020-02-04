@@ -49,7 +49,9 @@ class MasterViewController: UIViewController {
     }
 
     @objc func goToNextRaceTrack(_ sender: Any) {
-         print("Next!")
+         if colors.count > currentViewControllerIndex {
+             self.pageVC.goToNextPage()
+         }
     }
 
     
@@ -210,4 +212,15 @@ extension MasterViewController: UIPageViewControllerDataSource, UIPageViewContro
         return currentViewControllerIndex
     }
     
+}
+
+extension UIPageViewController {
+    
+    func goToNextPage(animated: Bool = true, completion: ((Bool) -> Void)? = nil) {
+        if let currentViewController = viewControllers?[0] {
+            if let nextPage = dataSource?.pageViewController(self, viewControllerAfter: currentViewController) {
+                setViewControllers([nextPage], direction: .forward, animated: animated, completion: completion)
+            }
+        }
+    }
 }
