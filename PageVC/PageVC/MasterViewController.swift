@@ -44,8 +44,10 @@ class MasterViewController: UIViewController {
     }
 
     @objc func goToPreviousRaceTrack(_ sender: Any) {
-        var index: Int = currentViewControllerIndex
-         print("Previous!")
+        if currentViewControllerIndex == 0 { return }
+        currentViewControllerIndex -= 1
+        let vc = detailViewControllerAt(index: currentViewControllerIndex)
+        self.pageVC.setViewControllers([vc!], direction: .reverse, animated: true)
     }
 
     @objc func goToNextRaceTrack(_ sender: Any) {
@@ -204,13 +206,13 @@ extension MasterViewController: UIPageViewControllerDataSource, UIPageViewContro
         return detailViewControllerAt(index: currentIndex)
     }
 
-    func presentationCount(for pageViewController: UIPageViewController) -> Int {
-        colors.count
-    }
-    
-    func presentationIndex(for pageViewController: UIPageViewController) -> Int {
-        return currentViewControllerIndex
-    }
+//    func presentationCount(for pageViewController: UIPageViewController) -> Int {
+//        colors.count
+//    }
+//    
+//    func presentationIndex(for pageViewController: UIPageViewController) -> Int {
+//        return currentViewControllerIndex
+//    }
     
 }
 
